@@ -18,9 +18,15 @@ with st.sidebar:
     )
     st.markdown("---")
     st.header("Model Parameters")
+    available_voices = [
+        'af',  # Default voice is a 50-50 mix of Bella & Sarah
+        'af_bella', 'af_sarah', 'am_adam', 'am_michael',
+        'bf_emma', 'bf_isabella', 'bm_george', 'bm_lewis',
+        'af_nicole', 'af_sky',
+    ]
     selected_voice = st.selectbox(
         "Select Voice",
-        ["af_bella", "en_us_jesse", "en_us_mickey", "ja_kokoro", "zh_mandarin"],
+        available_voices,
         index=0,
     )
     speech_speed = st.slider(
