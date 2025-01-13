@@ -1,0 +1,4 @@
+venv/
+__pycache__/
+*.pyc
+.streamlit/secrets.toml # If you don't want to commit your secrets
