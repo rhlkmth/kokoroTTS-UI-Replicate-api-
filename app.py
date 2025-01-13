@@ -10,15 +10,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- Get API Token from Streamlit Secrets (Recommended for Deployment) ---
-REPLICATE_API_TOKEN = st.secrets.get("REPLICATE_API_TOKEN")
-
-if not REPLICATE_API_TOKEN:
-    st.error("Please set the `REPLICATE_API_TOKEN` secret in your Streamlit app's settings.")
-    st.stop()
-
-replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
-
 # --- Sidebar ---
 with st.sidebar:
     st.title("Replicate TTS App")
@@ -37,10 +28,13 @@ with st.sidebar:
     )
     st.markdown("---")
     st.markdown(
-        "**Deployment Note:** This app needs to be deployed on a platform that can run Python code (e.g., Streamlit Cloud)."
+        "**Enter your Replicate API Token below:** This token is needed to authenticate with the Replicate API."
     )
-    st.markdown(
-        "Set your Replicate API token as a **secret** in your deployment platform's settings (e.g., Streamlit Secrets)."
+    replicate_api_token_input = st.text_input(
+        "Replicate API Token",
+        type="password",
+        placeholder="r8_...",
+        help="Find your API token at https://replicate.com/account/api_tokens",
     )
 
 # --- Main Section ---
@@ -53,17 +47,20 @@ text_input = st.text_area(
 )
 
 if st.button("Generate Speech"):
-    if not text_input:
+    if not replicate_api_token_input:
+        st.error("Please enter your Replicate API Token in the sidebar.")
+    elif not text_input:
         st.warning("Please enter some text to generate speech.")
     else:
         with st.spinner("Generating speech..."):
             try:
+                client = replicate.Client(api_token=replicate_api_token_input)
                 input = {
                     "text": text_input,
                     "speed": speech_speed,
                     "voice": selected_voice,
                 }
-                output = replicate_client.run(
+                output = client.run(
                     "jaaari/kokoro-82m:dfdf537ba482b029e0a761699e6f55e9162cfd159270bfe0e44857caa5f275a6",
                     input=input,
                 )
