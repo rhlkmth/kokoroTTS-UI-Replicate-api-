@@ -1,4 +1,4 @@
-# Streamlit Text-to-Speech App with Replicate API
+# Kokoro Text-to-Speech App with Replicate API
 
 This is a Streamlit web application that uses the Replicate API to generate speech from text.
 
